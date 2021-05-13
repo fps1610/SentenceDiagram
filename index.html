@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="eng">
+
+<head>
+
+    <!-- Page title displayed on browse -->
+  <title>DiagramMe - Sentence Diagramming Tool</title>
+
+    <!-- Meta to set the file type and content -->
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <!-- Importing  Libraries to HTML -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
+
+    <!-- Importing style sheet to HTML -->
+  <link rel="stylesheet" href="css/Style.css" />
+  <link rel="stylesheet" href="css/fonts.css" />
+
+    <!-- Importing JavaScript files to HTML -->
+    <script src="js/sentences.js"></script>
+  <script src="js/Sentence_Labelling.js"></script>
+  <script src="js/Sentence_Diagramming.js"></script>
+
+</head>
+
+<body>
+  <!-- Popup Displayed on user's first visit to the website -->
+
+      <!-- initialy set to hidden to avoid it being repititive  -->
+  <div hidden class="popupWrap">
+
+        <!-- Div for transparent background -->
+    <div class="popupBg"></div>
+
+      <!-- Div to be a container to the text -->
+    <div class="box"> <b>
+
+          <!-- Text to introduce the tool and where to access it depending on the users purpose -->
+        <h3>Welcome to DiagramMe!</h3>
+      </b> - a Sentence Diagramming Tool that allows you how to diagram sentences in a intuitive and interactive way,
+      designed to practice your knowledge on the topic and improve your grammar skills. </br></br>
+      If you are totally new to Sentence Diagrams, or want to know how the labelling functionality of this website
+      works, we reccomend you to look at learning how to label words, here:<a onclick="howtolabel(this)"
+        class="editButtons smallPadding" href="#How_to_Label">How to Label</a></br></br>
+      If you know how to label words but want to know how to diagram them correctly, or want to know how the diagramming
+      functionality of this website works, we recommend you to visit this page first:<a onclick="howToDiagram(this)"
+        class="editButtons smallPadding" href="#How_to_Diagram">How to Diagram</a></br></br>
+      If you are eager to get started, enter here:<a class="editButtons smallPadding"
+        onclick="closePopup()">Start!</a></br></br>
+    </div>
+  </div>
+
+  <!-- Entire Application Content    -->
+  <div class="content">
+
+    <!-- Top Menu navigation  -->
+    <nav>
+      <ul>
+        <li>
+              <!-- Once logo is clicked the hole page is reloaded and the user gets the homepage on its initial status -->
+          <div class="logo" onclick="location.reload()">DiagramMe </div>
+        </li>
+        <li>
+              <!-- if users navigate and click on "Diagramming Tool" the page won't be reloaded, so if they have worked on a sentence their work will still be there -->
+
+          <a class="nav-link active activeMenu" href="#Labeling_Sentence">Diagramming Tool </a>
+        </li>
+                      <!-- user gets the "How to Label" screen without the page being reloaded -->
+        <li><a class="nav-link How_to_Label" href="#How_to_Label">How to Label</a></li>
+
+                              <!-- user gets the "How to Diagram" screen without the page being reloaded -->
+        <li><a class="nav-link How_to_Diagram" href="#How_to_Diagram">How to Diagram</a></li>
+      </ul>
+    </nav>
+
+   <!-- Page content area -->
+
+    <div class="section">
+
+
+      <!-- How to Label Words Page Content the class "active" is interacting with JS to define that this is section will be displayed when users access page -->
+
+      <div id="Labeling_Sentence" class="active">
+
+        <p>
+                <!--instructive text -->
+
+        <h3 class="instructions">First, let's select the sentence you wish to diagram:</h3>
+        </p>
+                <!-- this div is populated by JS that creates a dropdown menu with sentences -->
+        <div id="selectBox"></div>
+
+                <!-- The title of the current content being displayed  this is hidden until a sentence is selected-->
+        <span hidden class="boardTitle">
+          <h2>Sentence Labelling</h2>
+        </span>
+
+                <!-- The area will be populated with word and buttons  this is hidden until a sentence is selected-->
+                <div hidden class="labelBoard">
+          <div id="sentenceArea"> </div>
+          <div id="buttonsArea"></div>
+        </div>
+
+                <!-- instructive text to guide the user on how to use the tool this is also hidden until the user selects a sentence 
+                  the text has highlighted parts to catch user's attention and also with most relevant information nedded to complete the task-->
+        <div id="UIhelper" class="topMargin">
+          <p>Great! Now start <span class="highlight">dragging the words</span> in the board into the colourful button
+            that corresponds to their correct grammatical function.</p>
+          <p>Note that <span class="highlight">the colour of the word will change</span> once you have done it right.
+
+          </p> Once you have <span class="highlight">finished labelling all words, the diagramming board will appear
+            automatically. </span>
+        </div>
+
+        <!-- Diagramming Tool Second Part Page Content
+        when user finishes completing the process of dragging the words to the buttons, colouring them the page is updated with a new bigger board containing the sentence couloured
+      the diagramming step was separated from the labelling process to avoid overwhelming users by displaying too much information and tasks -->
+
+        <div hidden id="Diagramming_Tool">
+          <div class="wrapAll">
+
+                <!-- hold board and buttons -->
+            <div class="container">
+
+                <!-- The area will be holding the sentence and will accept line buttons that will be dropped here-->
+              <div id="board">
+
+                <!-- Tip inside board to guide users on what to do, it disappears once user drags an element into the board-->
+                <div class="tipBoard"><span class="tipText">Tips:</br></br>
+                    Drag the yellow buttons on the left and the words
+                    here to create your diagram!
+                    </br></br>
+                    Select an object and click on the "Rotate" button to change its rotation.
+
+                  </span>
+                </div>
+              </div>
+              
+                <!-- buttons with different lines for creatting diagrams-->
+              <div class="linesButtons"><img class="lines_bg" src="img/lines/1.svg" width="70px" height="70px"
+                  alt="large horizontal line" />
+                <img class="lines_bg resize" src="img/lines/2.svg" width="70px" height="70px" alt="small horizontal line" />
+                <img class="lines_bg" src="img/lines/3.svg" width="70px" height="70px" alt="verb horizontal line" />
+                <img class="lines_bg" src="img/lines/4.svg" width="70px" height="70px" alt="direct object horizontal line" />
+                <img class="lines_bg" src="img/lines/5.svg" width="70px" height="70px" alt="predicate noun line" />
+                <img class="lines_bg resize" src="img/lines/6.svg" width="70px" height="70px" alt="conjunction line" />
+              </div>
+
+            </div>
+            <div>
+                       <!-- buttons for editing the elements on the board-->
+              
+                       <!-- button that invokes a function that deletes lines that are selected-->
+              <span class="editButtons" onclick="deleteSelected()">
+                Delete Line
+              </span>
+
+                        <!-- button that invokes a function that rotates elements that are selected-->
+              <span class="editButtons" onclick="rotateElement()">
+                Rotate
+              </span>
+                       <!-- button that invokes a function that downaloads the "board"div into a png-->
+                       <span class="editButtons" id="btnSave">
+                Save Diagram
+              </span>
+                                     <!-- button that reloads the page to its initial state, simullating coming back to the previous state-->
+
+              <div class="editButtons block" onclick="location.reload()">
+                < Back to Labelling</div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+                                       <!-- instrunctions on how to label -->
+
+  
+                               <!-- pedagogic references on how to label -->
+
+        <div id="How_to_Label">
+          <h2 class="allTitles ">How to Label Words </h2>
+          If you are just starting to learn about diagramming sentences, labelling the words in a sentence is the first
+          and a very important step to take. </br></br>
+          <h2 class="allTitles">Labelling Words References </h2>
+          If you want to <span class="highlight">learn about all about the functions of each word</span>, you can
+          research online or download this pdf from Central Texas College: <a class="editButtons smallPadding"
+            target="blank" href="/Sentence_Diagramming/pdf/english_grammar_analysis_understanding_the_basics.pdf"
+            src="/Sentence_Diagramming/pdf/english_grammar_analysis_understanding_the_basics.pdf">Grammar Analysis<img
+              class="icon" src="/Sentence_Diagramming/img/icon/download_icon.svg" width="7px" /> </a></br></br>
+
+                               <!-- detailed instrunctions on how to use Labelling the tool -->
+                               <h2 class="allTitles">How to Label Words on DiagramMe </h2>
+
+          1 - The first thing you will need is a sentence to work with, you can <span class="highlight">select a
+            sentence clicking on the dropdown menu</span> as shown on the image below.
+          <img class="screenshot" width="700px" src="img/screenshots/select_sentence.png" />
+          </br></br>
+          2 - After selecting, a board will appear with the selected sentence and colourful buttons with different
+          grammatical labels.
+          </br></br>
+          3 - The words are detached from each other. You can <span class="highlight">start dragging the word into the
+            colourful button</span> that corresponds to its correct grammatical label. When the word changes to the
+          colour of a button, it means that you chose the right label.
+          <img class="screenshot" width="700px" src="img/screenshots/drag_word.png" />
+          </br></br>
+          4 - When <span class="highlight">all the words in the sentence change their colours</span>, the page will
+          refresh and it means you completed labelling your sentence! Well Done! Now it's time to learn <a
+            onclick="howToDiagram(this)" class="editButtons smallPadding" href="#How_to_Diagram">How to Diagram</a>
+          using this website.
+
+                               <!-- instrunctions on diagramming sentences -->
+
+                               <!-- pedagogic references on diagramming sentences -->
+
+
+        </div>
+        <div id="How_to_Diagram">
+          <h2 class="allTitles">How to Diagram</h2>
+          If you are here, it means you already know how to label a sentence, if you don't, don't worry, check here<a
+            onclick="howtolabel(this)" class="editButtons smallPadding" href="#How_to_Label">How to Label</a>
+          </br></br>
+
+          <h2 class="allTitles">Sentence Diagram References</h2>
+          In case you need a refresher on what word to put on top of certain line and how to connect lines, have a look
+          online, or check this <a class="editButtons smallPadding" target="blank"
+            src="/Sentence_Diagramming/pdf/Sentence_Diagramming_Reference.pdf"
+            href="/Sentence_Diagramming/pdf/Sentence_Diagramming_Reference.pdf">Reference Sheet<img class="icon"
+              src="/Sentence_Diagramming/img/icon/download_icon.svg" width="7px" /></a>
+          </br></br>
+
+                               <!-- detailed instrunctions on how to use the diagramming tool -->
+                               <h2 class="allTitles">How to Diagram Sentences on DiagramMe </h2>
+          When you have your sentence labelled and colourful on the top of a white board, and yellow buttons on the
+          left, it's time to <span class="highlight">start dragging those yellow buttons into the board</span> to create
+          lines to draw your diagram.
+          <img class="screenshot" width="700px" src="img/screenshots/drag_line.png" />
+          </br> </br>
+          -> You can <span class="highlight">rotate the lines and the words</span> to expand your diagramming options.
+          Once you select the element you want to rotate, it will highlight itself, click on the "Rotate" button, bellow
+          the board. </br>
+          <i>You can rotate a line multiple times.</br>
+            You can rotate a word once and rotate it back to its start angle.</i>
+          <img class="screenshot" width="700px" src="img/screenshots/rotate.png" />
+
+          </br> </br>
+          -> You can <span class="highlight">delete the lines</span> you won't use, by selecting the line, once it is
+          highlighted in yellow simply click on the "Delete Line" button, beside the "Rotate" button.
+          <img class="screenshot" width="700px" src="img/screenshots/delete_line.png" />
+
+          </br> </br>
+          -> Finally, you can <span class="highlight">save your diagram</span> into your computer by clicking on the
+          "Save Diagram" button beside the "Rotate" button.
+          <img class="screenshot" width="700px" src="img/screenshots/save_diagram.png" />
+
+
+        </div>
+      </div>
+    </div>
+                                   <!--script to handle and simulate different pages navigation -->
+    <script>
+      $(".nav-link").on("click", function (e) {
+        $(".activeMenu").removeClass("activeMenu");
+        $(this).addClass("activeMenu");
+        $(".active").removeClass("active");
+        $(e.target.getAttribute("href")).addClass("active");
+      });
+
+
+    </script>
+</body>
+
+</html>
